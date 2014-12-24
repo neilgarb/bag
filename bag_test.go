@@ -17,7 +17,7 @@ func TestBagString(t *testing.T) {
 		t.Errorf(`Expected "%v", got "%v".`, expected, result)
 	}
 
-	bag.itemSet.occupied[Position{1, 1}] = true // NOT the use case, but useful
+	bag.ItemSet.occupied[Position{1, 1}] = true // NOT the use case, but useful
 	expected = "\n0 0\n0 1\n"
 	result = bag.String()
 	if result != expected {

@@ -3,7 +3,7 @@ package bag
 import "sync"
 
 type ItemSet struct {
-	items    map[*Item]*Position
+	Items    map[*Item]*Position
 	occupied map[Position]bool
 	mutex    sync.Mutex
 }
@@ -21,19 +21,19 @@ func NewItemSet() *ItemSet {
 func (self *ItemSet) Add(item *Item) {
 	self.mutex.Lock()
 	defer self.mutex.Unlock()
-	self.items[item] = nil
+	self.Items[item] = nil
 }
 
 // Remove removes an item from this item set.
 func (self *ItemSet) Remove(item *Item) {
 	self.mutex.Lock()
 	defer self.mutex.Unlock()
-	delete(self.items, item)
+	delete(self.Items, item)
 }
 
 // Count returns the number of items in this item set.
 func (self *ItemSet) Count() int {
-	return len(self.items)
+	return len(self.Items)
 }
 
 // Arrange arranges the items in this set using the given strategy.
@@ -44,7 +44,7 @@ func (self *ItemSet) Arrange(width, height int, strategy ArrangeStrategy) error 
 	if err != nil {
 		return err
 	}
-	self.items = newItemSet.items
+	self.Items = newItemSet.Items
 	self.occupied = newItemSet.occupied
 	return nil
 }
@@ -53,9 +53,9 @@ func (self *ItemSet) Arrange(width, height int, strategy ArrangeStrategy) error 
 func (self *ItemSet) Position(item *Item, x, y int) {
 	self.mutex.Lock()
 	defer self.mutex.Unlock()
-	self.items[item] = &Position{x, y}
-	for i := 0; i < item.height; i++ {
-		for j := 0; j < item.width; j++ {
+	self.Items[item] = &Position{x, y}
+	for i := 0; i < item.Height; i++ {
+		for j := 0; j < item.Width; j++ {
 			self.occupied[Position{x + j, y + i}] = true
 		}
 	}

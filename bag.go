@@ -6,9 +6,9 @@ import (
 )
 
 type Bag struct {
-	width   int
-	height  int
-	itemSet *ItemSet
+	Width   int
+	Height  int
+	ItemSet *ItemSet
 	mutex   sync.Mutex
 }
 
@@ -22,14 +22,14 @@ func NewBag(width, height int) *Bag {
 func (self *Bag) String() string {
 	buf := bytes.NewBuffer(nil)
 	buf.WriteString("\n")
-	for i := 0; i < self.height; i++ {
-		for j := 0; j < self.width; j++ {
-			if self.itemSet.IsOccupied(j, i) {
+	for i := 0; i < self.Height; i++ {
+		for j := 0; j < self.Width; j++ {
+			if self.ItemSet.IsOccupied(j, i) {
 				buf.WriteString("1")
 			} else {
 				buf.WriteString("0")
 			}
-			if j != self.width-1 {
+			if j != self.Width-1 {
 				buf.WriteString(" ")
 			}
 		}
@@ -42,20 +42,20 @@ func (self *Bag) String() string {
 // will have no effect. The item is added with nil position, which means it
 // hasn't been positioned yet.
 func (self *Bag) Add(item *Item) {
-	self.itemSet.Add(item)
+	self.ItemSet.Add(item)
 }
 
 // Remove removes the given item from the bag.
 func (self *Bag) Remove(item *Item) {
-	self.itemSet.Remove(item)
+	self.ItemSet.Remove(item)
 }
 
 // Count returns the number of items in this bag.
 func (self *Bag) Count() int {
-	return self.itemSet.Count()
+	return self.ItemSet.Count()
 }
 
 // Arrange will give each item in the bag a position using the given strategy.
 func (self *Bag) Arrange(strategy ArrangeStrategy) error {
-	return self.itemSet.Arrange(self.width, self.height, strategy)
+	return self.ItemSet.Arrange(self.Width, self.Height, strategy)
 }

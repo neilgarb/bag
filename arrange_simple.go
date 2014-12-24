@@ -26,7 +26,7 @@ func (self *SimpleStrategy) Arrange(width, height int, itemSet *ItemSet) (*ItemS
 	itemCount := itemSet.Count()
 	itemList := make(ItemList, itemCount)
 	i := 0
-	for k, _ := range itemSet.items {
+	for k, _ := range itemSet.Items {
 		itemList[i] = k
 		i++
 	}
@@ -40,8 +40,8 @@ func (self *SimpleStrategy) Arrange(width, height int, itemSet *ItemSet) (*ItemS
 				// Can we place this item at this position?
 				canPlace = true
 			CanPlaceLoop:
-				for ii := 0; ii < v.height; ii++ {
-					for jj := 0; jj < v.width; jj++ {
+				for ii := 0; ii < v.Height; ii++ {
+					for jj := 0; jj < v.Width; jj++ {
 						if newItemSet.IsOccupied(j+jj, i+ii) {
 							canPlace = false
 							break CanPlaceLoop
@@ -59,7 +59,7 @@ func (self *SimpleStrategy) Arrange(width, height int, itemSet *ItemSet) (*ItemS
 		// We can't place this item, so the items in this bag don't fit using
 		// this strategy.
 		if !canPlace {
-			return nil, fmt.Errorf(`Could not place item %v.`, v.payload)
+			return nil, fmt.Errorf(`Could not place item %v.`, v.Payload)
 		}
 	}
 	return newItemSet, nil
