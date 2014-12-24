@@ -4,14 +4,14 @@ import "testing"
 
 func TestBagString(t *testing.T) {
 	bag := NewBag(1, 1)
-	expected := "0\n"
+	expected := "\n0\n"
 	result := bag.String()
 	if result != expected {
 		t.Errorf(`Expected "%v", got "%v".`, expected, result)
 	}
 
 	bag = NewBag(2, 2)
-	expected = "0 0\n0 0\n"
+	expected = "\n0 0\n0 0\n"
 	result = bag.String()
 	if result != expected {
 		t.Errorf(`Expected "%v", got "%v".`, expected, result)
