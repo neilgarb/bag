@@ -49,6 +49,18 @@ func (self *ItemSet) Arrange(width, height int, strategy ArrangeStrategy) error 
 	return nil
 }
 
+// Position sets the position of item to {x, y}.
+func (self *ItemSet) Position(item *Item, x, y int) {
+	self.mutex.Lock()
+	defer self.mutex.Unlock()
+	self.items[item] = &Position{x, y}
+	for i := 0; i < item.height; i++ {
+		for j := 0; j < item.width; j++ {
+			self.occupied[Position{x + j, y + i}] = true
+		}
+	}
+}
+
 // IsOccupied returns true if the position {x, y} is occupied.
 func (self *ItemSet) IsOccupied(x, y int) bool {
 	_, found := self.occupied[Position{x, y}]

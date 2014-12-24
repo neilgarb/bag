@@ -20,6 +20,8 @@ func NewSimpleStrategy() *SimpleStrategy {
 //            one is found which can fit the current item.
 //       2.2. If there isn't such a space, fail - we can't fit all the items
 //            in.
+// If d is max(width, height) and n is the number of items, this strategy
+// runs in O(n * d^4).
 func (self *SimpleStrategy) Arrange(width, height int, itemSet *ItemSet) (*ItemSet, error) {
 	itemCount := itemSet.Count()
 	itemList := make(ItemList, itemCount)
@@ -30,42 +32,33 @@ func (self *SimpleStrategy) Arrange(width, height int, itemSet *ItemSet) (*ItemS
 	}
 	sort.Sort(itemList)
 	newItemSet := NewItemSet()
-	var canPlace, placed bool
+	var canPlace bool
 	for _, v := range itemList {
-		placed = false
+	PositionLoop:
 		for i := 0; i < height; i++ {
 			for j := 0; j < width; j++ {
 				// Can we place this item at this position?
 				canPlace = true
+			CanPlaceLoop:
 				for ii := 0; ii < v.height; ii++ {
 					for jj := 0; jj < v.width; jj++ {
 						if newItemSet.IsOccupied(j+jj, i+ii) {
 							canPlace = false
-							break
+							break CanPlaceLoop
 						}
-					}
-					if !canPlace {
-						break
 					}
 				}
 				// If we can, great! Store the position and mark the slots
 				// occupied by this item as occupied.
 				if canPlace {
-					newItemSet.items[v] = &Position{j, i}
-					for ii := 0; ii < v.height; ii++ {
-						for jj := 0; jj < v.width; jj++ {
-							newItemSet.occupied[Position{j + jj, i + ii}] = true
-						}
-					}
-					placed = true
-					break
+					newItemSet.Position(v, j, i)
+					break PositionLoop
 				}
 			}
-			if placed {
-				break
-			}
 		}
-		if !placed {
+		// We can't place this item, so the items in this bag don't fit using
+		// this strategy.
+		if !canPlace {
 			return nil, fmt.Errorf(`Could not place item %v.`, v.payload)
 		}
 	}
